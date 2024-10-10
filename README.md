@@ -1,67 +1,53 @@
-## Foundry
+# Projet Orderbook
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Description
+Ce projet est un smart contract Solidity qui simule un orderbook pour échanger deux tokens ERC20. Les utilisateurs peuvent placer des ordres d'achat et de vente, et le smart contract se charge d'apparier les ordres correspondants.
 
-Foundry consists of:
+## Prérequis
+- Foundry (pour compiler et exécuter les tests)
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Installation
 
-## Documentation
+1. Clonez ce dépôt :
+   ```bash
+   git clone https://github.com/AgustinGomezDelToro/oderbook-solidity
 
-https://book.getfoundry.sh/
+2. Installez Foundry en suivant la documentation officielle : https://book.getfoundry.sh/getting-started/installation.html
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
+Installez les dépendances si nécessaire :
+```bash
+    forge install
 ```
 
-### Test
+### Pour exécuter simplement les tests :
 
-```shell
-$ forge test
+``` bash
+forge coverage
 ```
 
-### Format
+## Fonctionnalités principales du contrat
 
-```shell
-$ forge fmt
-```
+- `placeOrder(uint256 amount, uint256 price, bool isBuyOrder)` : permet à un utilisateur de placer un ordre d'achat ou de vente.
+- `matchOrders()` : fonction interne qui apparie les ordres d'achat et de vente disponibles.
+- `cancelOrder(uint256 index, bool isBuyOrder)` : permet à un utilisateur d'annuler son ordre en fonction de son index.
+- `getBuyOrders()` : retourne la liste des ordres d'achat actifs.
+- `getSellOrders()` : retourne la liste des ordres de vente actifs.
 
-### Gas Snapshots
+## Structure du projet
 
-```shell
-$ forge snapshot
-```
+- `src/Orderbook.sol` : contient le smart contract principal de l'orderbook.
+- `src/TokenA.sol` et `src/TokenB.sol` : contrats simples ERC20 pour les tests.
+- `test/Orderbook.t.sol` : tests unitaires du smart contract Orderbook.
 
-### Anvil
+## Explication des tests
 
-```shell
-$ anvil
-```
+Les tests unitaires vérifient plusieurs scénarios importants pour l'orderbook :
 
-### Deploy
+- `testPlaceOrder()` : Vérifie si un ordre d'achat est bien placé dans le carnet d'ordres.
+- `testOrderMatching()` : Vérifie si les ordres d'achat et de vente se correspondent correctement et que les jetons sont échangés.
+- `testPartialOrderMatching()` : Vérifie si une correspondance partielle est effectuée, et si le reste de l'ordre est maintenu actif.
+- `testInsufficientBalanceReverts()` : Vérifie que l'exécution échoue si l'utilisateur n'a pas assez de fonds pour passer un ordre.
+- `testCancelOrder()` : Vérifie qu'un utilisateur peut annuler un ordre d'achat ou de vente, et que celui-ci devient inactif.
+- `testUnmatchedOrdersDueToPrice()` : Vérifie que les ordres ne sont pas appariés lorsque les prix ne correspondent pas.
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
 
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
-# oderbook-solidity
