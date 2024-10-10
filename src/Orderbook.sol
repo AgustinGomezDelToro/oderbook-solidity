@@ -8,8 +8,8 @@ contract Orderbook {
         address trader;
         uint256 amount;
         uint256 price;
-        bool isBuyOrder;
-        bool isActive;
+        bool isBuyOrder; // true = buy, false = sell
+        bool isActive; // for cancellation
     }
 
     Order[] public buyOrders;
@@ -81,6 +81,7 @@ contract Orderbook {
                 _removeBuyOrder(i);
             }
         }
+
         for (uint256 j = 0; j < sellOrders.length; j++) {
             if (!sellOrders[j].isActive) {
                 _removeSellOrder(j);
